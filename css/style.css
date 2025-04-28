@@ -274,7 +274,7 @@ footer a:hover {
     }
 
     /* Force landscape orientation for mobile */
-    /* #app {
+    #app {
         transform: rotate(-90deg);
         transform-origin: left top;
         width: 100vh;
@@ -283,7 +283,7 @@ footer a:hover {
         position: absolute;
         top: 100%;
         left: 0;
-    } */
+    }
 
     footer {
         display: none;
