@@ -187,43 +187,7 @@ body {
     box-sizing: border-box;
 }
 
-/* #app {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    padding: 10px;
-}
 
-#logo img {
-    max-width: 100%;
-    height: auto;
-}
-
-#container {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.column {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-.absolute {
-    position: relative;
-}
-
-canvas {
-    width: 100%;
-    height: auto;
-}
-
-/* Header styles */
 .header {
     display: flex;
     justify-content: space-between;
@@ -297,6 +261,7 @@ footer a:hover {
 @media (max-width: 480px) {
     #container {
         padding: 10px;
+        
     }
 
     .btn {
@@ -307,4 +272,19 @@ footer a:hover {
     .info img, .option img {
         max-width: 20px;
     }
-} 
+
+    /* Force landscape orientation for mobile */
+    #app {
+        transform: rotate(-90deg);
+        transform-origin: left top;
+        width: 100vh;
+        height: 100vw;
+        overflow-x: hidden;
+        position: absolute;
+        top: 100%;
+        left: 0;
+    }
+    footer{
+        display: none;
+    }
+}
