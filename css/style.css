@@ -241,9 +241,7 @@ footer a {
 footer a:hover {
     text-decoration: underline;
 }
-#Alerta{
-    display: none;
-}
+
 
 /* Responsive styles */
 @media (max-width: 768px) {
@@ -279,38 +277,4 @@ footer a:hover {
         max-width: 20px;
     }
 
-    #Alerta {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.9);
-        color: white;
-        font-size: 1.2rem;
-        z-index: 9999;
-        text-align: center;
-        flex-direction: column;
-    }
-    
-    #Alerta p {
-        margin: 10px 0;
-    }
-    
-    #Alerta button {
-        padding: 10px 20px;
-        font-size: 1rem;
-        border: none;
-        border-radius: 5px;
-        background-color: #007BFF;
-        color: white;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-    
-    #Alerta button:hover {
-        background-color: #0056b3;
-    }}
+}
