@@ -17,6 +17,7 @@ class Play extends Scene {
         this.updateFontSize();
         $("#logo").classList.add('play-status');
         this.event();
+        this.initMobileControls();
         this.start();
     }
 
@@ -50,6 +51,12 @@ class Play extends Scene {
         res.end('bg');
         $("#logo").classList.remove('play-status');
         hotkey.clearAll();
+        if (this.player && this.player.destroy) {
+            this.player.destroy();
+        }
+        if (this.mobileControls) {
+            this.mobileControls.destroy();
+        }
     }
 
     initData() {
@@ -336,6 +343,14 @@ class Play extends Scene {
 
     initPlayer() {
         this.player = this.factory(Player);
+    }
+
+    initMobileControls() {
+        // Detecta se é mobile
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (isMobile && typeof MobileControls !== 'undefined') {
+            this.mobileControls = new MobileControls(this.player, this);
+        }
     }
 
     draw(data) {
