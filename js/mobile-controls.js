@@ -8,7 +8,13 @@ class MobileControls {
         this.touchStartY = 0;
         this.currentTouchX = 0;
         this.currentTouchY = 0;
+        this.currentElement = null;
         this.fireButton = null;
+        
+        // Bind methods para manter contexto
+        this.boundTouchStart = this.handleTouchStart.bind(this);
+        this.boundTouchMove = this.handleTouchMove.bind(this);
+        this.boundTouchEnd = this.handleTouchEnd.bind(this);
         
         this.init();
     }
@@ -17,11 +23,15 @@ class MobileControls {
         // Cria botão de tiro
         this.createFireButton();
         
+        // Configura canvas para aceitar touch
+        const canvas = this.scene.canvas;
+        canvas.style.touchAction = 'none';
+        
         // Adiciona listeners de touch
-        this.scene.canvas.addEventListener('touchstart', this.handleTouchStart.bind(this), false);
-        this.scene.canvas.addEventListener('touchmove', this.handleTouchMove.bind(this), false);
-        this.scene.canvas.addEventListener('touchend', this.handleTouchEnd.bind(this), false);
-        this.scene.canvas.addEventListener('touchcancel', this.handleTouchEnd.bind(this), false);
+        canvas.addEventListener('touchstart', this.boundTouchStart, { passive: false });
+        canvas.addEventListener('touchmove', this.boundTouchMove, { passive: false });
+        canvas.addEventListener('touchend', this.boundTouchEnd, { passive: false });
+        canvas.addEventListener('touchcancel', this.boundTouchEnd, { passive: false });
     }
 
     createFireButton() {
