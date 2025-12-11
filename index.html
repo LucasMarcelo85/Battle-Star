@@ -13,9 +13,73 @@
     <link rel="stylesheet" href="css/mobile.css">
     <link rel="shortcut icon" href="./img/icone__1_-removebg-preview.png" type="image/x-icon">
     <title>Galácticos</title>
+
+    <style>
+        /* Estilos específicos para o Bloqueio Mobile */
+        #mobile-block-modal {
+            display: none; /* Escondido por padrão */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+
+        .mobile-warning-content {
+            background: rgba(20, 20, 35, 0.9);
+            border: 2px solid #00d2ff;
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 90%;
+            width: 400px;
+            box-shadow: 0 0 20px #00d2ff;
+        }
+
+        .mobile-warning-content h2 {
+            color: #ff4757;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            font-size: 1.5rem;
+        }
+
+        .mobile-warning-content p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            color: #e0e0e0;
+        }
+
+        .mobile-warning-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+    </style>
 </head>
 
 <body>
+    <div id="mobile-block-modal">
+        <div class="mobile-warning-content">
+            <span class="mobile-warning-icon">💻</span>
+            <h2>Acesso Restrito a PC</h2>
+            <p>
+                Para garantir a melhor experiência e precisão nos controles, 
+                <strong>Galácticos</strong> foi desenvolvido exclusivamente para Computadores.
+                <br><br>
+                A jogabilidade móvel não está disponível no momento. Por favor, acesse através de um Desktop para jogar.
+            </p>
+            <button id="close-mobile-warning" class="skip-btn">Entendi</button>
+        </div>
+    </div>
+
     <div id="video-overlay">
         <button id="play-video-btn">Click to Play</button>
     </div>
@@ -25,10 +89,10 @@
         <div id="intro-modal-1" class="intro-modal">
             <p class="message pre">
                 <em>Use <strong>W、A、S、D</strong> Para direcionar. e <strong>Space</strong> Para atirar。</em>
-                <h1>Missão</h1>
-                <strong> 1- Destrua os alies. <br>
+            <h1>Missão</h1>
+            <strong> 1- Destrua os aliens. <br>
                 2- Cuidado com os humanos que estão voltando para o Planeta Terra. <br>
-            3- Cuidado com os Meteoros, eles podem destruir a nave.</strong>
+                3- Cuidado com os Meteoros, eles podem destruir a nave.</strong>
             </p>
             <button class="skip-btn">SKIP</button>
         </div>
@@ -37,17 +101,16 @@
             <p>Cuidado para não acertar aliados.</p>
             <button class="skip-btn">SKIP</button>
         </div>
-        <div id="intro-modal-3" class="intro-modal" style="display: none;">
-            <img src="img/skip2.jpg" alt="skip 2">
-            <p>Derrote o inimigo, mate o máximo que puder.</p>
-            <button id="play-game-btn" class="skip-btn">Jogar</button>
-        </div>
+       <div id="intro-modal-3" class="intro-modal" style="display: none;">
+    <img src="img/skip2.jpg" alt="skip 2">
+    <p>Derrote o inimigo, mate o máximo que puder.</p>
+    <button id="play-game-btn" class="skip-btn">Jogar</button>
+</div>
     </div>
 
-    <!-- Game -->
     <div id="app" style="display: none;">
         <div id="logo">
-            
+
             <img src="./img/banner-removebg-preview.png" alt="logo">
         </div>
         <div id="container" class="absolute">
@@ -181,10 +244,56 @@
     <script src="js/main.js"></script>
     <script src="js/notmobile.js"></script>
     <script src="js/class/cursor.js"></script>
-    <script src="js/mobile-controls.js"></script>
     <script src="js/responsive.js"></script>
     <script src="js/performance.js"></script>
+
+    <script>
+    // 1. Função para verificar se é mobile
+    function isMobileDevice() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 800;
+    }
+
+    // 2. Elementos
+    const mobileModal = document.getElementById('mobile-block-modal');
+    const closeMobileBtn = document.getElementById('close-mobile-warning');
     
+    // IDs dos botões que iniciam o jogo (verifique se existem na página)
+    const btnStartMenu = document.getElementById('start-btn');      // Botão do Menu Principal
+    const btnPlaySkip = document.getElementById('play-game-btn');   // Botão do último Skip
+
+    // 3. Função de Bloqueio
+    function blockMobileAction(event) {
+        if (isMobileDevice()) {
+            // Impede o comportamento padrão do jogo (não deixa iniciar)
+            event.preventDefault();
+            event.stopImmediatePropagation(); // Impede que o script do jogo rode
+            
+            // Mostra o modal de aviso
+            if(mobileModal) mobileModal.style.display = 'flex';
+            
+            return false;
+        }
+        // Se for PC, não faz nada e deixa o jogo rodar normalmente.
+    }
+
+    // 4. Aplica o bloqueio nos botões
+    if (btnStartMenu) {
+        btnStartMenu.addEventListener('click', blockMobileAction, true);
+        btnStartMenu.addEventListener('touchstart', blockMobileAction, true);
+    }
+
+    if (btnPlaySkip) {
+        btnPlaySkip.addEventListener('click', blockMobileAction, true); // True = Captura o clique ANTES do script do jogo
+        btnPlaySkip.addEventListener('touchstart', blockMobileAction, true);
+    }
+
+    // 5. Botão para fechar o aviso apenas
+    if (closeMobileBtn) {
+        closeMobileBtn.addEventListener('click', () => {
+            mobileModal.style.display = 'none';
+        });
+    }
+</script>
 </body>
 
 </html>
