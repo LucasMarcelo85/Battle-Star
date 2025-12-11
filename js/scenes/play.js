@@ -89,11 +89,6 @@ class Play extends Scene {
             elem: Fuel,
             cooldown: new Cooldown(config.game.appendFriendCooldown),
         };
-        this.stars = {
-            arr: [],
-            elem: Star,
-            cooldown: new Cooldown(config.game.appendStarCooldown),
-        };
     }
 
     collision(a, b, callback) {
@@ -151,7 +146,6 @@ class Play extends Scene {
         this.append(this.meteorites);
         this.append(this.friends);
         this.append(this.fuels);
-        this.append(this.stars);
     }
 
     updateing(arr, callback) {
@@ -185,11 +179,13 @@ class Play extends Scene {
                     el instanceof Meteorite ?
                     shootMeteorite : shootEnemy
                 );
+                this.game.data.aliensKilled++;
                 this.updateshoot();
                 this.shoot();
             });
             this.bulletCollision(bullet, this.friends.arr, (el) => {
                 this.updateScore(shootFriend);
+                this.game.data.alliesKilled++;
                 this.shoot();
             });
         });
@@ -244,17 +240,13 @@ class Play extends Scene {
         });
     }
 
-    updateStars() {
-        this.updateing(this.stars.arr);
-    }
-
     updateElements() {
-        this.updateStars();
         this.player.update();
         this.updateEmenys();
         this.updateFriends();
         this.updateFuels();
         this.updateBullets();
+
     }
 
     update() {

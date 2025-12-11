@@ -11,12 +11,12 @@ class Over extends Scene{
     updateView(){
         const {
             time,
-            score,
-            shoot,
+            aliensKilled,
+            alliesKilled,
         } = this.game.data;
         $('#over .time').innerHTML = numberFormat(time);
-        $('#over .score').innerHTML = numberFormat(score);
-        $('#over .shoot').innerHTML = numberFormat(shoot);
+        $('#over .aliens-killed').innerHTML = numberFormat(aliensKilled);
+        $('#over .allies-killed').innerHTML = numberFormat(alliesKilled);
     }
 
     event(){

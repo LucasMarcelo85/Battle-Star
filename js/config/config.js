@@ -75,7 +75,6 @@ const fps = 60;
         appendEnemyCooldown: [2 * fps, 5 * fps],
         appendFriendCooldown : [2*fps,5*fps],
         appendFuelCooldown : [2*fps,5*fps],
-        appendStarCooldown : [1*fps,2*fps],
     }
 
     config.fuelConfig = {
@@ -97,6 +96,8 @@ const fps = 60;
             shoot: 0,
             time : 0,
             name : '',
+            aliensKilled: 0,
+            alliesKilled: 0,
         }
     }
     
@@ -186,17 +187,6 @@ const fps = 60;
 
     })();
 
-    config.star = (() => {
-
-        const o = {};
-
-        o.img = batchImport('star_', 12);
-
-        return o;
-
-    })();
-
-
     config.playerBullet = (() => {
         
         let o = bullet();
@@ -247,7 +237,6 @@ const fps = 60;
         };
 
         return Object.assign(
-            batchAdd(path+'/star/','star_',12,'png'),
             batchAdd(path+'/meteorites/','meteorites_',4,'png'),
             images,
         )

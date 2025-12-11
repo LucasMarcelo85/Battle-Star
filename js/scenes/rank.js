@@ -13,11 +13,15 @@ class Rank extends Scene {
             name,
             score,
             time,
+            aliensKilled,
+            alliesKilled,
         } = this.game.data;
         localStorageData.add(key, {
             name,
             score,
             time,
+            aliensKilled,
+            alliesKilled,
         });
     }
 
@@ -26,17 +30,21 @@ class Rank extends Scene {
         let html = "";
         let position = 0;
         let data = [].concat(localStorageData.get(key).data);
-        const some = (a, b) => {
-            return (
-                (a.score === b.score) && (a.time === b.time)
-            );
-        }
-        data.sort((a, b) => {
-            if (a.score === b.score) {
-                return a.time < b.time ? 1 : -1;
-            }
-            return a.score < b.score ? 1 : -1;
+
+        // Calculate efficiency for each entry
+        data.forEach(el => {
+            el.efficiency = (el.aliensKilled * 10) + el.time - (el.alliesKilled * 20);
         });
+
+        const some = (a, b) => {
+            return a.efficiency === b.efficiency;
+        }
+
+        // Sort by efficiency
+        data.sort((a, b) => {
+            return b.efficiency - a.efficiency;
+        });
+
         setTimeout(() => {
             localStorageData.update(key, data);
             data.map((el, index) => {
@@ -50,8 +58,10 @@ class Rank extends Scene {
                  <tr>
                      <td>${numberFormat(position)}</td>
                      <td>${el.name}</td>
-                     <td>${numberFormat(el.score)}</td>
                      <td>${numberFormat(el.time)}</td>
+                     <td>${numberFormat(el.aliensKilled)}</td>
+                     <td>${numberFormat(el.alliesKilled)}</td>
+                     <td>${numberFormat(el.efficiency)}</td>
                  </tr>
              `;
             });
