@@ -49,6 +49,8 @@ class Game {
         this.toggleScene('start');
     }
 
+    
+
     play() {
         this.toggleScene('play');
     }

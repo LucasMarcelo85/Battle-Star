@@ -10,11 +10,12 @@
     const videoOverlay = document.getElementById('video-overlay');
     const playVideoBtn = document.getElementById('play-video-btn');
 
+    const game = new Game();
+
     function startGame() {
         introVideo.style.display = 'none';
         skipContainer.style.display = 'none';
         app.style.display = 'block';
-        const game = new Game();
         game.start();
     }
 
