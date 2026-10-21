@@ -1,6 +1,9 @@
 class Start extends Scene {
     setup() {
         super.setup();
+        if (typeof ResponsiveGame !== 'undefined') {
+            ResponsiveGame.endGameplay();
+        }
         this.game.initData();
         this.event();
     }

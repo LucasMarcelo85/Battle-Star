@@ -17,7 +17,7 @@ class ResponsiveGame {
             ResponsiveGame.fit();
             window.addEventListener('resize', ResponsiveGame.fit);
             window.addEventListener('orientationchange', () => setTimeout(ResponsiveGame.fit, 150));
-            if (window.visualViewport) window.visualViewport.addEventListener('resize', ResponsiveGame.fit);
+            document.addEventListener('fullscreenchange', ResponsiveGame.fit);
         } else {
             const app = document.getElementById('app');
             if (app) {
@@ -38,6 +38,7 @@ class ResponsiveGame {
         if (!ResponsiveGame.isMobile()) return;
 
         document.body.classList.remove('mobile-game-active');
+        ResponsiveGame.fit();
         const exitFullscreen = document.exitFullscreen || document.webkitExitFullscreen;
         if (ResponsiveGame.fullscreenRequested &&
             (document.fullscreenElement || document.webkitFullscreenElement) && exitFullscreen) {
@@ -53,23 +54,27 @@ class ResponsiveGame {
     static fit() {
         const app = document.getElementById('app');
         if (!app) return;
-        const vv = window.visualViewport;
-        const sw = vv ? vv.width : window.innerWidth;
-        const sh = vv ? vv.height : window.innerHeight;
-        const scale = Math.min(sw / config.game.w, sh / config.game.h);
-        const scaleX = document.body.classList.contains('mobile-game-active') ?
-            sw / config.game.w : scale;
-        const scaleY = document.body.classList.contains('mobile-game-active') ?
-            sh / config.game.h : scale;
+        const sw = window.innerWidth;
+        const sh = window.innerHeight;
+        const gameActive = document.body.classList.contains('mobile-game-active');
+
+        app.style.position = 'fixed';
+        app.style.margin = '0';
+        if (!gameActive && ResponsiveGame.isPortrait()) {
+            app.style.width = sw + 'px';
+            app.style.height = sh + 'px';
+            app.style.left = '0';
+            app.style.top = '0';
+            app.style.transform = 'none';
+            return;
+        }
 
         app.style.width = config.game.w + 'px';
         app.style.height = config.game.h + 'px';
-        app.style.position = 'fixed';
         app.style.left = '50%';
         app.style.top = '50%';
-        app.style.margin = '0';
         app.style.transformOrigin = 'center center';
-        app.style.transform = `translate(-50%, -50%) scale(${scaleX}, ${scaleY})`;
+        app.style.transform = `translate(-50%, -50%) scale(${sw / config.game.w}, ${sh / config.game.h})`;
     }
 
     static enterFullscreen() {

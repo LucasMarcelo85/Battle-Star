@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
@@ -24,33 +24,8 @@
         </div>
     </div>
 
-    <div id="video-overlay">
-        <button id="play-video-btn">Click to Play</button>
-    </div>
-    <video autoplay id="intro-video" src="img/video inicial.mp4"></video>
-
-    <div id="skip-container" style="display: none;">
-        <div id="intro-modal-1" class="intro-modal">
-            <p class="message pre">
-                <em>Use <strong>W、A、S、D</strong> Para direcionar. e <strong>Space</strong> Para atirar。</em>
-            <h1>Missão</h1>
-            <strong> 1- Destrua os aliens. <br>
-                2- Cuidado com os humanos que estão voltando para o Planeta Terra. <br>
-                3- Cuidado com os Meteoros, eles podem destruir a nave.</strong>
-            </p>
-            <button class="skip-btn">SKIP</button>
-        </div>
-        <div id="intro-modal-2" class="intro-modal" style="display: none;">
-            <img src="img/skip1.jpg" alt="skip 1">
-            <p>Cuidado para não acertar aliados.</p>
-            <button class="skip-btn">SKIP</button>
-        </div>
-       <div id="intro-modal-3" class="intro-modal" style="display: none;">
-    <img src="img/skip2.jpg" alt="skip 2">
-    <p>Derrote o inimigo, mate o máximo que puder.</p>
-    <button id="play-game-btn" class="skip-btn">Jogar</button>
-</div>
-    </div>
+    <video id="intro-video" autoplay muted playsinline webkit-playsinline preload="auto"
+        src="img/video inicial.mp4"></video>
 
     <div id="app" style="display: none;">
         <div id="logo">
@@ -59,7 +34,7 @@
         </div>
         <div id="container" class="absolute">
             <div id="start" class="column absolute">
-                <button id="start-btn" class="btn">Start Game</button>
+                <button id="start-btn" class="btn">Jogar</button>
             </div>
             <div id="play" class="absolute">
                 <canvas id="canvas" class="absolute"></canvas>
@@ -187,10 +162,7 @@
     <script src="js/scenes/rank.js"></script>
     <script src="js/game.js"></script>
     <script src="js/main.js"></script>
-    <script src="js/notmobile.js"></script>
-    <script src="js/class/cursor.js"></script>
     <script src="js/responsive.js"></script>
-    <script src="js/performance.js"></script>
 
 </body>
 

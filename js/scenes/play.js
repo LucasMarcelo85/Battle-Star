@@ -52,9 +52,6 @@ class Play extends Scene {
     uninstall() {
         raf.remove(this.raf_id);
         res.end('bg');
-        if (typeof ResponsiveGame !== 'undefined') {
-            ResponsiveGame.endGameplay();
-        }
         $("#logo").classList.remove('play-status');
         hotkey.clearAll();
         if (this.player && this.player.destroy) {
@@ -255,8 +252,10 @@ class Play extends Scene {
 
     }
 
-    update() {
+    update(timestamp) {
         if (ResponsiveGame.isMobile() && ResponsiveGame.isPortrait()) return;
+
+        if (this.mobileControls) this.mobileControls.update(timestamp);
 
         this.timeCooldown.update().active(() => {
             this.game.data.time++;

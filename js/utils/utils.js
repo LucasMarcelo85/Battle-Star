@@ -57,9 +57,9 @@ const raf = (() => {
         events = {};
     };
 
-    const update = () => {
+    const update = (timestamp) => {
         for (const fn of Object.values(events)) {
-            fn();
+            fn(timestamp);
         }
         requestAnimationFrame(update);
     }
