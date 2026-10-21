@@ -14,69 +14,13 @@
     <link rel="shortcut icon" href="./img/icone__1_-removebg-preview.png" type="image/x-icon">
     <title>Galácticos</title>
 
-    <style>
-        /* Estilos específicos para o Bloqueio Mobile */
-        #mobile-block-modal {
-            display: none; /* Escondido por padrão */
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.95);
-            z-index: 9999;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: white;
-            padding: 20px;
-        }
-
-        .mobile-warning-content {
-            background: rgba(20, 20, 35, 0.9);
-            border: 2px solid #00d2ff;
-            border-radius: 15px;
-            padding: 40px;
-            max-width: 90%;
-            width: 400px;
-            box-shadow: 0 0 20px #00d2ff;
-        }
-
-        .mobile-warning-content h2 {
-            color: #ff4757;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            font-size: 1.5rem;
-        }
-
-        .mobile-warning-content p {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            margin-bottom: 30px;
-            color: #e0e0e0;
-        }
-
-        .mobile-warning-icon {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            display: block;
-        }
-    </style>
 </head>
 
 <body>
-    <div id="mobile-block-modal">
-        <div class="mobile-warning-content">
-            <span class="mobile-warning-icon">💻</span>
-            <h2>Acesso Restrito a PC</h2>
-            <p>
-                Para garantir a melhor experiência e precisão nos controles, 
-                <strong>Galácticos</strong> foi desenvolvido exclusivamente para Computadores.
-                <br><br>
-                A jogabilidade móvel não está disponível no momento. Por favor, acesse através de um Desktop para jogar.
-            </p>
-            <button id="close-mobile-warning" class="skip-btn">Entendi</button>
+    <div id="rotate-device" role="status" aria-live="polite">
+        <div class="rotate-device-content">
+            <span class="rotate-device-icon" aria-hidden="true">↻</span>
+            <p>Vire o dispositivo para jogar na horizontal</p>
         </div>
     </div>
 
@@ -231,6 +175,7 @@
     <script src="js/class/plane.js"></script>
     <script src="js/class/bullet.js"></script>
     <script src="js/class/player.js"></script>
+    <script src="js/mobile-controls.js"></script>
     <script src="js/class/enemy.js"></script>
     <script src="js/class/meteorite.js"></script>
     <script src="js/class/friend.js"></script>
@@ -247,53 +192,6 @@
     <script src="js/responsive.js"></script>
     <script src="js/performance.js"></script>
 
-    <script>
-    // 1. Função para verificar se é mobile
-    function isMobileDevice() {
-        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 800;
-    }
-
-    // 2. Elementos
-    const mobileModal = document.getElementById('mobile-block-modal');
-    const closeMobileBtn = document.getElementById('close-mobile-warning');
-    
-    // IDs dos botões que iniciam o jogo (verifique se existem na página)
-    const btnStartMenu = document.getElementById('start-btn');      // Botão do Menu Principal
-    const btnPlaySkip = document.getElementById('play-game-btn');   // Botão do último Skip
-
-    // 3. Função de Bloqueio
-    function blockMobileAction(event) {
-        if (isMobileDevice()) {
-            // Impede o comportamento padrão do jogo (não deixa iniciar)
-            event.preventDefault();
-            event.stopImmediatePropagation(); // Impede que o script do jogo rode
-            
-            // Mostra o modal de aviso
-            if(mobileModal) mobileModal.style.display = 'flex';
-            
-            return false;
-        }
-        // Se for PC, não faz nada e deixa o jogo rodar normalmente.
-    }
-
-    // 4. Aplica o bloqueio nos botões
-    if (btnStartMenu) {
-        btnStartMenu.addEventListener('click', blockMobileAction, true);
-        btnStartMenu.addEventListener('touchstart', blockMobileAction, true);
-    }
-
-    if (btnPlaySkip) {
-        btnPlaySkip.addEventListener('click', blockMobileAction, true); // True = Captura o clique ANTES do script do jogo
-        btnPlaySkip.addEventListener('touchstart', blockMobileAction, true);
-    }
-
-    // 5. Botão para fechar o aviso apenas
-    if (closeMobileBtn) {
-        closeMobileBtn.addEventListener('click', () => {
-            mobileModal.style.display = 'none';
-        });
-    }
-</script>
 </body>
 
 </html>

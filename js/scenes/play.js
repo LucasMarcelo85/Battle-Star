@@ -9,6 +9,9 @@ class Play extends Scene {
     }
     setup() {
         this.muteFlag = false;
+        if (typeof ResponsiveGame !== 'undefined') {
+            ResponsiveGame.startGameplay();
+        }
         this.initData();
         this.initPlayer();
         this.updateTime();
@@ -49,6 +52,9 @@ class Play extends Scene {
     uninstall() {
         raf.remove(this.raf_id);
         res.end('bg');
+        if (typeof ResponsiveGame !== 'undefined') {
+            ResponsiveGame.endGameplay();
+        }
         $("#logo").classList.remove('play-status');
         hotkey.clearAll();
         if (this.player && this.player.destroy) {
@@ -250,6 +256,8 @@ class Play extends Scene {
     }
 
     update() {
+        if (ResponsiveGame.isMobile() && ResponsiveGame.isPortrait()) return;
+
         this.timeCooldown.update().active(() => {
             this.game.data.time++;
             this.updateTime();
@@ -338,9 +346,7 @@ class Play extends Scene {
     }
 
     initMobileControls() {
-        // Detecta se é mobile
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        if (isMobile && typeof MobileControls !== 'undefined') {
+        if (typeof MobileControls !== 'undefined' && MobileControls.isTouchDevice()) {
             this.mobileControls = new MobileControls(this.player, this);
         }
     }

@@ -11,6 +11,9 @@ class Start extends Scene {
             btn,
             'click',
             () => {
+                if (typeof ResponsiveGame !== 'undefined') {
+                    ResponsiveGame.enterFullscreen();
+                }
                 btn.setAttribute('disabled', 'disabled');
                 res.loadAssets(() => {
                     this.game.play();
