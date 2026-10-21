@@ -14,6 +14,7 @@ class Play extends Scene {
         }
         this.initData();
         this.initPlayer();
+        this.damageEffects = [];
         this.updateTime();
         this.updateFuel();
         this.updateScore();
@@ -98,16 +99,63 @@ class Play extends Scene {
         if (!a.run || !b.run) {
             return;
         }
-        var yCoolision = (a, b) => {
-            return a.y > b.y && a.y < b.y + b.h;
-        };
-        var xCoolision = (a, b) => {
-            return a.x > b.x && a.x < b.x + b.w;
-        };
-        if (yCoolision(a, b) || yCoolision(b, a)) {
-            if (xCoolision(a, b) || xCoolision(b, a)) {
-                callback(a, b);
+        const aHitbox = a.hitbox;
+        const bHitbox = b.hitbox;
+        const aLeft = a.x + (aHitbox ? a.w * aHitbox.x : 0);
+        const aTop = a.y + (aHitbox ? a.h * aHitbox.y : 0);
+        const aRight = a.x + a.w * (aHitbox ? aHitbox.x + aHitbox.w : 1);
+        const aBottom = a.y + a.h * (aHitbox ? aHitbox.y + aHitbox.h : 1);
+        const bLeft = b.x + (bHitbox ? b.w * bHitbox.x : 0);
+        const bTop = b.y + (bHitbox ? b.h * bHitbox.y : 0);
+        const bRight = b.x + b.w * (bHitbox ? bHitbox.x + bHitbox.w : 1);
+        const bBottom = b.y + b.h * (bHitbox ? bHitbox.y + bHitbox.h : 1);
+        if (aLeft < bRight && aRight > bLeft && aTop < bBottom && aBottom > bTop) {
+            callback(a, b);
+        }
+    }
+
+    damagePlayer() {
+        const now = performance.now();
+        if (!this.player.receiveDamage(now)) return false;
+        this.damageEffects.push({
+            x: this.player.x + this.player.w / 2,
+            y: this.player.y + this.player.h / 2,
+            age: 0,
+            startedAt: now,
+        });
+        this.updateFuel(config.fuelConfig.beingHit);
+        return true;
+    }
+
+    drawDamageEffects(timestamp) {
+        const ctx = this.ctx;
+        const now = Number.isFinite(timestamp) ? timestamp : performance.now();
+        for (let i = this.damageEffects.length - 1; i >= 0; i--) {
+            const effect = this.damageEffects[i];
+            effect.age = Math.max(effect.age, now - effect.startedAt);
+            const progress = effect.age / 260;
+            if (progress >= 1) {
+                this.damageEffects.splice(i, 1);
+                continue;
             }
+
+            const radius = 6 + progress * 23;
+            ctx.save();
+            ctx.globalAlpha = 1 - progress;
+            const glow = ctx.createRadialGradient(effect.x, effect.y, 1, effect.x, effect.y, radius);
+            glow.addColorStop(0, '#fff8c7');
+            glow.addColorStop(0.35, '#ffb52e');
+            glow.addColorStop(1, 'rgba(255, 68, 30, 0)');
+            ctx.fillStyle = glow;
+            ctx.beginPath();
+            ctx.arc(effect.x, effect.y, radius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#ffe59a';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(effect.x, effect.y, 5 + progress * 20, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.restore();
         }
     }
 
@@ -170,9 +218,6 @@ class Play extends Scene {
             shootMeteorite,
             shootFriend
         } = config.scoreConfig;
-        const {
-            beingHit
-        } = config.fuelConfig;
         this.updateing(this.playerBullets, bullet => {
             this.bulletCollision(bullet, this.enemyBullets, (el) => {
                 el.death();
@@ -193,9 +238,7 @@ class Play extends Scene {
             });
         });
         this.updateing(this.enemyBullets, bullet => {
-            this.playerCollision(bullet, () => {
-                this.updateFuel(beingHit);
-            })
+            this.playerCollision(bullet, () => this.damagePlayer());
         });
     }
 
@@ -204,16 +247,13 @@ class Play extends Scene {
             shootEnemy,
             shootMeteorite,
         } = config.scoreConfig;
-        const {
-            beingHit
-        } = config.fuelConfig;
         this.updateing(this.enemys.arr, enemy => {
             this.playerCollision(enemy, () => {
                 this.updateScore(
                     enemy instanceof Meteorite ?
                     shootMeteorite : shootEnemy
                 );
-                this.updateFuel(beingHit);
+                this.damagePlayer();
                 this.updateshoot();
                 this.shoot();
             })
@@ -268,6 +308,7 @@ class Play extends Scene {
         this.appendElement();
 
         this.updateElements();
+        this.drawDamageEffects(timestamp);
     }
 
     updateTime() {
@@ -372,6 +413,9 @@ class Play extends Scene {
     }
 
     event() {
+        if (this.eventsBound) return;
+        this.eventsBound = true;
+
         const togglePause = ()=>{
             this.pauseFlag ? this.start() : this.pause();
         }

@@ -80,8 +80,8 @@ const fps = 60;
     config.fuelConfig = {
         fuelLoseSpeed: -1,
         fuelRaiseSpeed: 15,
-        fuelMax: 30,
-        beingHit : -15,
+        fuelMax: 100,
+        beingHit : -12,
     }
     config.scoreConfig = {
         shootEnemy: 5,
@@ -91,7 +91,7 @@ const fps = 60;
 
     config.data = ()=>{
         return {
-            fuel: 15,
+            fuel: 60,
             score: 0,
             shoot: 0,
             time : 0,
@@ -109,6 +109,7 @@ const fps = 60;
             return {
                 y: h / 2 - o.h / 2,
                 bulletCooldown: 0.5 * fps,
+                hitbox: { x: 0.08, y: 0.08, w: 0.84, h: 0.84 },
                 animation : planeAnimation(),
             }
         });

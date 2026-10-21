@@ -20,6 +20,9 @@ class Over extends Scene{
     }
 
     event(){
+        if (this.eventsBound) return;
+        this.eventsBound = true;
+
         const btn = $('#submit-btn');
         const name = $('#name');
         on(

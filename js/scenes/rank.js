@@ -70,6 +70,9 @@ class Rank extends Scene {
     }
 
     event() {
+        if (this.eventsBound) return;
+        this.eventsBound = true;
+
         on(
             $('#restart-btn'),
             'click',

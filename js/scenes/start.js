@@ -9,6 +9,9 @@ class Start extends Scene {
     }
 
     event() {
+        if (this.eventsBound) return;
+        this.eventsBound = true;
+
         const btn = $('#start-btn');
         on(
             btn,

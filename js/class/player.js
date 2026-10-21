@@ -2,10 +2,17 @@ class Player extends Plane {
     
     setup() {
         super.setup('player');
+        this.invulnerableUntil = 0;
         this.initBullet('playerBullet', this.scene.playerBullets);
         this.mouseListener = null;
         this.mouseDownListener = null;
         this.event();
+    }
+
+    receiveDamage(now = performance.now()) {
+        if (now < this.invulnerableUntil) return false;
+        this.invulnerableUntil = now + 750;
+        return true;
     }
 
     up() {
